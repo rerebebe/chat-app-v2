@@ -22,6 +22,13 @@ function Homepage() {
     navigate("/chat");
     sessionStorage.setItem("room", room[0].room);
   };
+  const connectToRoomMsg = (id) => {
+    const room = lastMessages.filter((item) => item._id === id);
+    console.log(room[0]._id);
+    socket.emit("join_room", { room: room[0]._id });
+    navigate("/chat");
+    sessionStorage.setItem("room", room[0]._id);
+  };
 
   useEffect(() => {
     Axios.get(`${API_HOST}/friends`, {
@@ -30,23 +37,24 @@ function Homepage() {
       setFriends(response.data);
       setRoomArray(response.data);
       console.log(response.data);
-      // const Rooms = roomarray.map((item) => {
-      //   return item.room;
-      // });
-      // Axios.get(`${API_HOST}/latest-message`, {
-      //   params: {
-      //     room: response.data.map((item) => {
-      //       return item.room;
-      //     }),
-      //   },
-      // }).then((response) => {
-      //   console.log(response.data);
-      //   setLastMessages(
-      //     response.data.map((item) => {
-      //       return item.message;
-      //     })
-      //   );
-      // });
+      const Rooms = roomarray.map((item) => {
+        return item.room;
+      });
+      Axios.get(`${API_HOST}/latest-message`, {
+        params: {
+          room: response.data.map((item) => {
+            return item.room;
+          }),
+        },
+      }).then((response) => {
+        console.log(response.data);
+        setLastMessages(response.data);
+        // setLastMessages(
+        //   response.data.map((item) => {
+        //     return item.message;
+        //   })
+        // );
+      });
     });
     Axios.get(`${API_HOST}/newfriends`, {
       params: {
@@ -139,13 +147,19 @@ function Homepage() {
                 })
               : null}
           </div>
-          {/* <div className="msg">
-            {lastMessages.map((msg) => {
+          <div className="msg">
+            {lastMessages.reverse().map((msg) => {
               return (
-                <div>{msg ? <button>{msg}</button> : <button></button>}</div>
+                <button
+                  onClick={() => {
+                    connectToRoomMsg(msg._id);
+                  }}
+                >
+                  {msg.message}
+                </button>
               );
             })}
-          </div> */}
+          </div>
         </div>
 
         {/* <div>

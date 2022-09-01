@@ -140,16 +140,8 @@ app.post("/login", async (req, res) => {
 
 // friendslist that you chatted before
 app.get("/friends", async (req, res) => {
-  // try {
-  //   // const userName = req.body.userName;
-  //   const username = req.query.username ?? "";
-  //   ChatModel.distinct("room", { author: username }).then((data) => {
-  //     console.log(data);
-  //     res.send(data);
-  //   });
-  // } catch (e) {
-  //   console.log("login error", e);
-  // }
+  const username = req.query.username ?? "";
+
   try {
     const username = req.query.username ?? "";
     RoomModel.find({ userName: username }).then((data) => {

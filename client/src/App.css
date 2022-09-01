@@ -9,7 +9,7 @@ body {
 }
 
 .msg button {
-  z-index: 2;
+  z-index: 1;
   background-color: rgba(197, 105, 121, 0.517);
   border: none;
   width: 300px;
@@ -24,6 +24,7 @@ body {
   flex-direction: column;
   gap: 50px;
   font-size: medium;
+  word-wrap: break-word;
 }
 
 .App {
@@ -84,7 +85,7 @@ body {
   cursor: pointer;
 }
 .chatroomHomepage {
-  width: 460px;
+  width: 160px;
   font-weight: 700;
   background-color: rgba(197, 105, 121, 0.517);
   margin: 1px 0px;
