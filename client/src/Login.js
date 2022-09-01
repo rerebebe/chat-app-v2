@@ -26,7 +26,7 @@ function Login() {
     );
     try {
       console.log(response);
-      navigate("/");
+      navigate("/homepage");
       setAlert(response.data);
       sessionStorage.setItem("name", userName);
     } catch {

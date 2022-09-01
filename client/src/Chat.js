@@ -103,7 +103,7 @@ function Chat() {
         className="EndChat"
         onClick={() => {
           sessionStorage.clear();
-          navigate("/login");
+          navigate("/");
         }}
       >
         End chat
