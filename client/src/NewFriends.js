@@ -8,6 +8,7 @@ import { ChatContext } from "./helpers/ChatContext";
 function NewFriends() {
   const navigate = useNavigate();
   const { allrequests, setAllRequests } = useContext(ChatContext);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     Axios.get(`${API_HOST}/newfriends`, {
@@ -79,39 +80,76 @@ function NewFriends() {
     console.log(response.data);
   };
 
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    const newFilter = allrequests.filter((user) => {
+      return user.userName.toLowerCase().includes(searchWord);
+    });
+    setFilteredUsers(newFilter);
+  };
+
   return (
     <div className="RoomTab">
       <div className="header">
-        <input placeholder="Search..." />
+        <input placeholder="Search..." type="text" onChange={handleFilter} />
       </div>
-      {allrequests.map((user, i) => {
-        return (
-          <div className="chatroom" key={user._id}>
-            <div>
-              Friend reqest from{" "}
-              <span className="newfriendspan">{user.userName}</span> !
-            </div>
-            <div>
-              <button
-                className="chatroomButton"
-                onClick={() => {
-                  addFriend(user._id);
-                }}
-              >
-                Yes
-              </button>
-              <button
-                className="chatroomButton"
-                onClick={() => {
-                  deleteRequest(user._id);
-                }}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        );
-      })}
+      {filteredUsers.length !== 0
+        ? filteredUsers.map((user, i) => {
+            return (
+              <div className="chatroom" key={user._id}>
+                <div>
+                  Friend reqest from{" "}
+                  <span className="newfriendspan">{user.userName}</span> !
+                </div>
+                <div>
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      addFriend(user._id);
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      deleteRequest(user._id);
+                    }}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        : allrequests.map((user, i) => {
+            return (
+              <div className="chatroom" key={user._id}>
+                <div>
+                  Friend reqest from{" "}
+                  <span className="newfriendspan">{user.userName}</span> !
+                </div>
+                <div>
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      addFriend(user._id);
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      deleteRequest(user._id);
+                    }}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            );
+          })}
     </div>
   );
 }

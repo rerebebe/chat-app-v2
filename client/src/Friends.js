@@ -5,6 +5,7 @@ import { v4 } from "uuid";
 
 function Friends() {
   const [allUsers, setAllUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   useEffect(() => {
     Axios.get(`${API_HOST}/all-users`, {
       params: {
@@ -39,26 +40,50 @@ function Friends() {
     console.log(singleUser[0].userName);
   };
 
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    const newFilter = allUsers.filter((user) => {
+      return user.userName.toLowerCase().includes(searchWord);
+    });
+    setFilteredUsers(newFilter);
+  };
+
   return (
     <div className="RoomTab">
       <div className="header">
-        <input placeholder="Search..." />
+        <input placeholder="Search..." type="text" onChange={handleFilter} />
       </div>
-      {allUsers.map((user, i) => {
-        return (
-          <div className="chatroom" key={user._id}>
-            {user.userName}
-            <button
-              className="chatroomButton"
-              onClick={() => {
-                addFriend(user._id);
-              }}
-            >
-              +
-            </button>
-          </div>
-        );
-      })}
+      {filteredUsers.length !== 0
+        ? filteredUsers.map((user, i) => {
+            return (
+              <div className="chatroom" key={user._id}>
+                {user.userName}
+                <button
+                  className="chatroomButton"
+                  onClick={() => {
+                    addFriend(user._id);
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            );
+          })
+        : allUsers.map((user, i) => {
+            return (
+              <div className="chatroom" key={user._id}>
+                {user.userName}
+                <button
+                  className="chatroomButton"
+                  onClick={() => {
+                    addFriend(user._id);
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            );
+          })}
     </div>
   );
 }

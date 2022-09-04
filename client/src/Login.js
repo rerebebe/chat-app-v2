@@ -55,7 +55,7 @@ function Login() {
           <div>
             <label>Password:</label>
             <input
-              type="text"
+              type="password"
               placeholder="password..."
               onChange={(e) => {
                 setPassword(e.target.value);
