@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 //bcrypt
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+require("dotenv").config();
 
 mongoose.connect(
   "mongodb+srv://default-user:regina7968@cluster0.xrxnc.mongodb.net/chat?retryWrites=true&w=majority",
@@ -290,6 +291,6 @@ app.post("/add-friends", async (req, res) => {
   }
 });
 
-server.listen("3001", () => {
+server.listen(process.env.PORT || 3001, () => {
   console.log("Server Running On 3001");
 });
