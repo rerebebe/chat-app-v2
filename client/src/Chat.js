@@ -7,9 +7,12 @@ function Chat() {
   const navigate = useNavigate();
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const [currentMessageNumber, setCurrentMessageNumber] = useState(10);
 
   const { socket, userName, room } = useContext(ChatContext);
-
+  const increment = () => {
+    setCurrentMessageNumber(currentMessageNumber + 1);
+  };
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -35,6 +38,7 @@ function Chat() {
         return [...list, messageData];
       });
       setCurrentMessage("");
+      increment();
     }
   };
   // client side will get the chat history from the MongoDB
@@ -55,10 +59,10 @@ function Chat() {
 
   return (
     <div className="chat-window">
+      {/* {currentMessageNumber} */}
       <div className="chat-header">
         <p>Live Chat</p>
       </div>
-
       <div className="chat-body">
         <ScrollToBottom className="message-container">
           {messageList.map((messageContent) => {
@@ -102,11 +106,10 @@ function Chat() {
       <button
         className="EndChat"
         onClick={() => {
-          sessionStorage.clear();
-          navigate("/");
+          navigate("/homepage");
         }}
       >
-        End chat
+        Go Back
       </button>
     </div>
   );

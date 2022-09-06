@@ -28,7 +28,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: [
+      "https://serene-pavlova-7c5355.netlify.app",
+      "http://localhost:3000",
+    ],
     method: ["GET", "POST"],
   },
 });
@@ -157,7 +160,7 @@ app.get("/friends", async (req, res) => {
 //get the last message
 app.get("/latest-message", (req, res) => {
   const room = req.query.room ?? "";
-  console.log(room);
+  // console.log(room);
   ChatModel.aggregate([
     {
       $sort: {
@@ -180,9 +183,20 @@ app.get("/latest-message", (req, res) => {
         },
       },
     },
+    {
+      $lookup: {
+        from: "rooms",
+        localField: "_id",
+        foreignField: "room",
+        as: "ROOM",
+      },
+    },
+    {
+      $unwind: "$ROOM",
+    },
   ]).then((data) => {
-    console.log(data);
     res.send(data);
+    console.log(data);
   });
 });
 

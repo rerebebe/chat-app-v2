@@ -47,8 +47,17 @@ function Homepage() {
           }),
         },
       }).then((response) => {
-        console.log(response.data);
-        setLastMessages(response.data);
+        console.log(
+          response.data.filter((item) => {
+            return item.ROOM.userName === sessionStorage.getItem("name");
+          })
+        );
+        setLastMessages(
+          response.data.filter((item) => {
+            return item.ROOM.userName === sessionStorage.getItem("name");
+          })
+        );
+
         // setLastMessages(
         //   response.data.map((item) => {
         //     return item.message;
@@ -129,7 +138,7 @@ function Homepage() {
           </Button>
         </OverlayTrigger>
         <div className="Chatlayout">
-          <div>
+          {/* <div>
             {friends
               ? friends.map((person, i) => {
                   return (
@@ -146,16 +155,18 @@ function Homepage() {
                   );
                 })
               : null}
-          </div>
+          </div> */}
           <div className="msg">
-            {lastMessages.reverse().map((msg) => {
+            {lastMessages.map((msg) => {
               return (
                 <button
+                  key={msg._id}
                   onClick={() => {
                     connectToRoomMsg(msg._id);
                   }}
                 >
-                  {msg.message}
+                  <span className="chatroomHomepage">{msg.ROOM.friend}</span>
+                  {"    "} {msg.message}
                 </button>
               );
             })}

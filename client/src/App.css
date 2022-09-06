@@ -12,7 +12,7 @@ body {
   z-index: 1;
   background-color: rgba(197, 105, 121, 0.517);
   border: none;
-  width: 300px;
+  width: 460px;
   background-color: rgba(197, 105, 121, 0.517);
   margin: 1px 0px;
   cursor: pointer;
@@ -21,7 +21,6 @@ body {
   padding: 30px 20px;
   align-items: left;
   display: flex;
-  flex-direction: column;
   gap: 50px;
   font-size: medium;
   word-wrap: break-word;
@@ -85,19 +84,11 @@ body {
   cursor: pointer;
 }
 .chatroomHomepage {
-  width: 160px;
+  width: 100px;
   font-weight: 700;
-  background-color: rgba(197, 105, 121, 0.517);
-  margin: 1px 0px;
-  cursor: pointer;
-  border: none;
   color: black;
-  padding: 30px 20px;
-  align-items: left;
+  padding: 0px 5px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: medium;
 }
 .lastMsg {
   padding-left: 20px;
