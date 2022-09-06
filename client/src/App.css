@@ -135,6 +135,17 @@ body {
   font-size: 20px;
   font-weight: 800;
 }
+.yourFriend {
+  color: rgba(236, 97, 120, 0.854);
+  font-size: 1.8em;
+  position: absolute;
+  right: 24%;
+  top: 3.5%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 100px;
+}
 
 .newfriendspan {
   color: white;

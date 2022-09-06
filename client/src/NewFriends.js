@@ -7,7 +7,7 @@ import { ChatContext } from "./helpers/ChatContext";
 
 function NewFriends() {
   const navigate = useNavigate();
-  const { allrequests, setAllRequests } = useContext(ChatContext);
+  const { allrequests, setAllRequests, socket } = useContext(ChatContext);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
@@ -37,16 +37,14 @@ function NewFriends() {
         username: sessionStorage.getItem("name"),
       },
     });
-    // const response3 = await Axios.post(`${API_HOST}/send`, {
-    //   author: sessionStorage.getItem("name"),
-    //   message: " ",
-    // });
 
     setAllRequests(function (prev) {
       return prev.filter((item) => item._id !== id);
     });
+    //sessionStorage.setItem("room", singleUser[0].room);
+    socket.emit("join_room", { room: singleUser[0].room });
     sessionStorage.setItem("room", singleUser[0].room);
-    navigate("/");
+    navigate("/chat");
     console.log(`key:${id}`);
     console.log(singleUser[0].room);
     console.log(response.data);

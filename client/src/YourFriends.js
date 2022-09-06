@@ -9,26 +9,27 @@ import { API_HOST } from "./helpers/constants";
 import { FaUserFriends } from "react-icons/fa";
 import { BsHeartFill } from "react-icons/bs";
 
-function Homepage() {
+function YourFriends() {
   const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
   const [lastMessages, setLastMessages] = useState([]);
   const [roomarray, setRoomArray] = useState([]);
   const { socket, allrequests, setAllRequests } = useContext(ChatContext);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
-  // const connectToRoom = (id) => {
-  //   const room = friends.filter((item) => item._id === id);
-  //   console.log(room[0].room);
-  //   socket.emit("join_room", { room: room[0].room });
-  //   navigate("/chat");
-  //   sessionStorage.setItem("room", room[0].room);
-  // };
-  const connectToRoomMsg = (id) => {
-    const room = lastMessages.filter((item) => item._id === id);
-    console.log(room[0]._id);
-    socket.emit("join_room", { room: room[0]._id });
+  const connectToRoom = (id) => {
+    const room = friends.filter((item) => item._id === id);
+    console.log(room[0].room);
+    socket.emit("join_room", { room: room[0].room });
     navigate("/chat");
-    sessionStorage.setItem("room", room[0]._id);
+    sessionStorage.setItem("room", room[0].room);
+  };
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    const newFilter = friends.filter((user) => {
+      return user.userName.toLowerCase().includes(searchWord);
+    });
+    setFilteredUsers(newFilter);
   };
 
   useEffect(() => {
@@ -38,34 +39,6 @@ function Homepage() {
       try {
         setFriends(response.data);
         setRoomArray(response.data);
-        console.log(response.data);
-        const Rooms = roomarray.map((item) => {
-          return item.room;
-        });
-        Axios.get(`${API_HOST}/latest-message`, {
-          params: {
-            room: response.data.map((item) => {
-              return item.room;
-            }),
-          },
-        }).then((response) => {
-          console.log(
-            response.data.filter((item) => {
-              return item.ROOM.userName === sessionStorage.getItem("name");
-            })
-          );
-          setLastMessages(
-            response.data.filter((item) => {
-              return item.ROOM.userName === sessionStorage.getItem("name");
-            })
-          );
-
-          // setLastMessages(
-          //   response.data.map((item) => {
-          //     return item.message;
-          //   })
-          // );
-        });
       } catch {
         console.log(err);
       }
@@ -83,9 +56,12 @@ function Homepage() {
     <div className="App">
       <div className="RoomTab">
         <div className="header">
-          <h1>Chat</h1>
+          <input placeholder="Search..." type="text" onChange={handleFilter} />
         </div>
-        <OverlayTrigger
+        {/* <div className="header">
+          <h1>Chat</h1>
+        </div> */}
+        {/* <OverlayTrigger
           placement="top"
           overlay={
             <Tooltip
@@ -168,9 +144,9 @@ function Homepage() {
           >
             <BsHeartFill />
           </Button>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
         <div className="Chatlayout">
-          {/* <div>
+          <div className="msg">
             {friends
               ? friends.map((person, i) => {
                   return (
@@ -187,43 +163,11 @@ function Homepage() {
                   );
                 })
               : null}
-          </div> */}
-          <div className="msg">
-            {lastMessages.map((msg) => {
-              return (
-                <button
-                  key={msg._id}
-                  onClick={() => {
-                    connectToRoomMsg(msg._id);
-                  }}
-                >
-                  <span className="chatroomHomepage">{msg.ROOM.friend}</span>
-                  {"    "} {msg.message}
-                </button>
-              );
-            })}
           </div>
         </div>
-
-        {/* <div>
-          <input
-            type="text"
-            placeholder="Name..."
-            onChange={(e) => setUserName(e.target.value)}
-          ></input>
-          <input
-            type="text"
-            placeholder="Room..."
-            onChange={(e) => setRoom(e.target.value)}
-          ></input>
-        </div>
-
-        <button className="ButtonChat" onClick={connectToRoom}>
-          Enter Chat
-        </button> */}
       </div>
     </div>
   );
 }
 
-export default Homepage;
+export default YourFriends;

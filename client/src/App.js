@@ -7,6 +7,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Homepage from "./Homepage";
 import Friends from "./Friends";
+import YourFriends from "./YourFriends";
 import NewFriends from "./NewFriends";
 import { ChatContext } from "./helpers/ChatContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -42,6 +43,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/add-friends" element={<Friends />} />
             <Route path="/newfriends" element={<NewFriends />} />
+            <Route path="/yourfriends" element={<YourFriends />} />
           </Routes>
         </ChatContext.Provider>
       </Router>

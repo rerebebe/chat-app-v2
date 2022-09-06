@@ -23,7 +23,7 @@ const RequestModel = require("./models/Requests");
 
 app.use(cors());
 app.use(express.json());
-//---------Scoket.io from here--------------//
+//---------Scoket.io from here--------------///
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
     const chat = new ChatModel({
       message: data.message,
       author: data.author,
@@ -70,10 +71,7 @@ io.on("connection", (socket) => {
       time: data.time,
     });
     try {
-      //save this info. into collection
-      chat.save().then((data) => {
-        socket.broadcast.emit("receive_message", data);
-      });
+      chat.save();
     } catch (err) {
       console.log(err);
     }
@@ -161,43 +159,50 @@ app.get("/friends", async (req, res) => {
 app.get("/latest-message", (req, res) => {
   const room = req.query.room ?? "";
   // console.log(room);
-  ChatModel.aggregate([
-    {
-      $sort: {
-        _id: -1,
-      },
-    },
-    {
-      $group: {
-        _id: "$room",
-        message: {
-          $first: "$message",
+  try {
+    if (room) {
+      ChatModel.aggregate([
+        {
+          $sort: {
+            _id: -1,
+          },
         },
-      },
-    },
-
-    {
-      $match: {
-        _id: {
-          $in: room,
+        {
+          $group: {
+            _id: "$room",
+            message: {
+              $first: "$message",
+            },
+          },
         },
-      },
-    },
-    {
-      $lookup: {
-        from: "rooms",
-        localField: "_id",
-        foreignField: "room",
-        as: "ROOM",
-      },
-    },
-    {
-      $unwind: "$ROOM",
-    },
-  ]).then((data) => {
-    res.send(data);
-    console.log(data);
-  });
+        {
+          $match: {
+            _id: {
+              $in: room,
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "rooms",
+            localField: "_id",
+            foreignField: "room",
+            as: "ROOM",
+          },
+        },
+        {
+          $unwind: "$ROOM",
+        },
+      ]).then((data) => {
+        res.send(data);
+        //console.log(data);
+      });
+    } else {
+      return;
+    }
+  } catch (e) {
+    console.log("finding error", e);
+  }
 });
 
 // new friends requests list

@@ -1,11 +1,15 @@
 import Axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { API_HOST } from "./helpers/constants";
 import { v4 } from "uuid";
+import { ChatContext } from "./helpers/ChatContext";
+import { useNavigate } from "react-router-dom";
 
 function Friends() {
   const [allUsers, setAllUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const { socket } = useContext(ChatContext);
+  const navigate = useNavigate();
   useEffect(() => {
     Axios.get(`${API_HOST}/all-users`, {
       params: {
@@ -25,18 +29,22 @@ function Friends() {
       room: v4(),
     }).then((response) => {
       const Room = response.data.room;
-
       Axios.post(`${API_HOST}/new-requests`, {
         userName: sessionStorage.getItem("name"),
         friend: singleUser[0].userName,
         room: Room,
+      }).then((response) => {
+        //console.log(response.data.room);
+        socket.emit("join_room", { room: response.data.room });
+        sessionStorage.setItem("room", response.data.room);
+        navigate("/chat");
       });
     });
 
     setAllUsers(function (prev) {
       return prev.filter((item) => item._id !== id);
     });
-    console.log(`key:${id}`);
+    // console.log(`key:${id}`);
     console.log(singleUser[0].userName);
   };
 
