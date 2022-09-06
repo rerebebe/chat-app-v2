@@ -155,6 +155,21 @@ app.get("/friends", async (req, res) => {
   }
 });
 
+// the person you are chatting to
+app.get("/chatroomfriend", async (req, res) => {
+  const room = req.query.room ?? "";
+  const username = req.query.username ?? "";
+
+  try {
+    RoomModel.find({ userName: username, room: room }).then((data) => {
+      console.log(data);
+      res.send(data);
+    });
+  } catch (e) {
+    consoxle.log("finding error", e);
+  }
+});
+
 //get the last message
 app.get("/latest-message", (req, res) => {
   const room = req.query.room ?? "";

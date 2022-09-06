@@ -2,17 +2,21 @@ import { useState, useContext, useEffect } from "react";
 import { ChatContext } from "./helpers/ChatContext";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+import { API_HOST } from "./helpers/constants";
 
 function Chat() {
   const navigate = useNavigate();
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const [currentMessageNumber, setCurrentMessageNumber] = useState(10);
-
+  // const [currentMessageNumber, setCurrentMessageNumber] = useState(10);
+  const [typing, setTyping] = useState("");
+  const [person, setPerson] = useState("");
   const { socket, userName, room } = useContext(ChatContext);
-  const increment = () => {
-    setCurrentMessageNumber(currentMessageNumber + 1);
-  };
+  // const increment = () => {
+  //   setCurrentMessageNumber(currentMessageNumber + 1);
+  // };
+
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -38,16 +42,27 @@ function Chat() {
         return [...list, messageData];
       });
       setCurrentMessage("");
-      increment();
+
+      // increment();
     }
   };
+  // chatroom friend
   // client side will get the chat history from the MongoDB
   useEffect(() => {
     socket.emit("output-message", { room: sessionStorage.getItem("room") });
     socket.on("output-message", (history) => {
       // console.log(history.map((chat) => chat.chatName));
-      // console.log(history);
+      //console.log(history);
       setMessageList(history);
+    });
+    Axios.get(`${API_HOST}/chatroomfriend`, {
+      params: {
+        username: sessionStorage.getItem("name"),
+        room: sessionStorage.getItem("room"),
+      },
+    }).then((response) => {
+      //console.log(response.data[0].friend);
+      setPerson(response.data[0].friend);
     });
   }, []);
   // when you send message, the other client will receive message right away
@@ -61,7 +76,11 @@ function Chat() {
     <div className="chat-window">
       {/* {currentMessageNumber} */}
       <div className="chat-header">
-        <p>Live Chat</p>
+        <p>
+          {person}
+          {""}
+          {typing}
+        </p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
