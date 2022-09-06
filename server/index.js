@@ -29,8 +29,8 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
-      "https://serene-pavlova-7c5355.netlify.app",
       "http://localhost:3000",
+      "https://flourishing-creponne-591bce.netlify.app",
     ],
     method: ["GET", "POST"],
   },
