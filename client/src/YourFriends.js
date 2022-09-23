@@ -14,7 +14,8 @@ function YourFriends() {
   const [friends, setFriends] = useState([]);
   const [lastMessages, setLastMessages] = useState([]);
   const [roomarray, setRoomArray] = useState([]);
-  const { socket, allrequests, setAllRequests } = useContext(ChatContext);
+  const { socket, allrequests, setAllRequests, setChatState } =
+    useContext(ChatContext);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const connectToRoom = (id) => {
@@ -53,119 +54,37 @@ function YourFriends() {
   }, []);
 
   return (
-    <div className="App">
-      <div className="RoomTab">
-        <div className="header">
-          <input placeholder="Search..." type="text" onChange={handleFilter} />
-        </div>
-        {/* <div className="header">
-          <h1>Chat</h1>
-        </div> */}
-        {/* <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip
-              style={{
-                position: "absolute",
-                backgroundColor: "pink",
-                padding: "2px 10px",
-                color: "white",
-                borderRadius: 3,
-                border: 2,
-              }}
-            >
-              add Friend
-            </Tooltip>
-          }
+    <div className="RoomTab">
+      <div className="header">
+        <input placeholder="Search..." type="text" onChange={handleFilter} />
+        <button
+          onClick={() => {
+            setChatState("homepage");
+          }}
         >
-          <Button
-            className="addFriend"
-            variant="secondary"
-            onClick={() => {
-              navigate("/add-friends");
-            }}
-          >
-            +
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip
-              style={{
-                position: "absolute",
-                backgroundColor: "pink",
-                padding: "2px 10px",
-                color: "white",
-                borderRadius: 3,
-                border: 2,
-              }}
-            >
-              New Friends
-            </Tooltip>
-          }
-        >
-          <Button
-            className="newFriend"
-            variant="secondary"
-            onClick={() => {
-              navigate("/newfriends");
-            }}
-          >
-            <FaUserFriends />
-            <span className="newfriendnumber">
-              {allrequests.length !== 0 ? allrequests.length : null}
-            </span>
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip
-              style={{
-                position: "absolute",
-                backgroundColor: "pink",
-                padding: "2px 10px",
-                color: "white",
-                borderRadius: 3,
-                border: 2,
-              }}
-            >
-              Friends
-            </Tooltip>
-          }
-        >
-          <Button
-            className="yourFriend"
-            variant="secondary"
-            onClick={() => {
-              navigate("/yourfriends");
-            }}
-          >
-            <BsHeartFill />
-          </Button>
-        </OverlayTrigger> */}
-        <div className="Chatlayout">
-          <div className="msg">
-            {friends
-              ? friends.map((person, i) => {
-                  return (
-                    <div key={person._id}>
-                      <button
-                        onClick={() => {
-                          connectToRoom(person._id);
-                        }}
-                        className="chatroomHomepage"
-                      >
-                        <div> {person.friend}</div>
-                      </button>
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        </div>
+          Back
+        </button>
       </div>
+
+      {friends
+        ? friends.map((person, i) => {
+            return (
+              <div key={person._id} className="chatroom">
+                <button
+                  className="chatroomHomepage"
+                  onClick={() => {
+                    connectToRoom(person._id);
+                  }}
+                >
+                  <div style={{ fontWeight: "bolder", fontSize: "15px" }}>
+                    {" "}
+                    {person.friend}
+                  </div>
+                </button>
+              </div>
+            );
+          })
+        : null}
     </div>
   );
 }

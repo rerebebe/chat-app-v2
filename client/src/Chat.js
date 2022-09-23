@@ -11,8 +11,8 @@ function Chat() {
   const [messageList, setMessageList] = useState([]);
   // const [currentMessageNumber, setCurrentMessageNumber] = useState(10);
   const [typing, setTyping] = useState("");
-  const [person, setPerson] = useState("");
-  const { socket, userName, room } = useContext(ChatContext);
+  // const [person, setPerson] = useState("");
+  const { socket, userName, room, person, setPerson } = useContext(ChatContext);
   // const increment = () => {
   //   setCurrentMessageNumber(currentMessageNumber + 1);
   // };
@@ -61,7 +61,7 @@ function Chat() {
         room: sessionStorage.getItem("room"),
       },
     }).then((response) => {
-      //console.log(response.data[0].friend);
+      console.log(response.data[0].friend);
       setPerson(response.data[0].friend);
     });
   }, []);
@@ -76,11 +76,15 @@ function Chat() {
     <div className="chat-window">
       {/* {currentMessageNumber} */}
       <div className="chat-header">
-        <p>
-          {person}
-          {""}
-          {typing}
-        </p>
+        <p>{person}</p>
+        {/* <button
+          className="EndChat"
+          onClick={() => {
+            navigate("/homepage");
+          }}
+        >
+          Go Back
+        </button> */}
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -122,14 +126,6 @@ function Chat() {
         />
         <button onClick={sendMessage}>&#9658;</button>
       </div>
-      <button
-        className="EndChat"
-        onClick={() => {
-          navigate("/homepage");
-        }}
-      >
-        Go Back
-      </button>
     </div>
   );
 }

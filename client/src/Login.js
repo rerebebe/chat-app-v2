@@ -3,6 +3,8 @@ import Axios from "axios";
 import { useContext, useState } from "react";
 import { ChatContext } from "./helpers/ChatContext";
 import { API_HOST } from "./helpers/constants";
+import { Input, Grid, Button, Spacer } from "@nextui-org/react";
+import { UserIcon } from "./components/UserIcon";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,9 +13,6 @@ function Login() {
     useContext(ChatContext);
 
   const logIn = async (e) => {
-    if (userName !== "" || password !== "") {
-      setAlert("please enter username/password.");
-    }
     e.preventDefault();
     const response = await Axios.post(
       `${API_HOST}/login`,
@@ -25,54 +24,100 @@ function Login() {
       // { withCredentials: true }
     );
     try {
-      console.log(response);
-      navigate("/homepage");
-      setAlert(response.data);
-      sessionStorage.setItem("name", userName);
+      if (response.data === "User not exist!!") {
+        navigate("/");
+        setAlert(response.data);
+      } else if (response.data === "Password Wrong!!") {
+        navigate("/");
+        setAlert(response.data);
+      } else {
+        console.log(response);
+        navigate("/main-page");
+        setAlert(response.data);
+        sessionStorage.setItem("name", userName);
+      }
     } catch {
       console.log("Wrong!!!");
-      navigate("/login");
+      navigate("/");
       setAlert(response.data);
     }
   };
 
   return (
     <div className="App">
-      <div className="loginTab">
-        {alert}
-        <div className="login">
-          <div>
-            <label>User Name:</label>
-            <input
-              type="text"
-              placeholder="userName..."
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
-              required
-            />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input
-              type="password"
-              placeholder="password..."
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              required
-            />
-          </div>
+      <form onSubmit={logIn}>
+        <div className="signinLoginTab">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            style={{ color: "blue" }}
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => {
+              navigate("/register");
+            }}
+            style={{ backgroundColor: "lightgrey" }}
+          >
+            Sign Up
+          </button>
         </div>
-        <button className="ButtonChat" onClick={logIn}>
+        <div className="loginTab">
+          <h1 style={{ color: "darkslategrey" }}>Log In on Chatty-App</h1>
+          {alert}
+          <div className="loginContent">
+            <Grid>
+              <Input
+                rounded
+                bordered
+                label="UserName"
+                placeholder="UserName"
+                size="md"
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
+                required
+              />
+            </Grid>
+
+            <Grid>
+              <Input.Password
+                rounded
+                bordered
+                placeholder="Password"
+                label="Password"
+                size="md"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                required
+              />
+            </Grid>
+          </div>
+          {/* <button className="ButtonChat" onClick={logIn}>
           Log in
         </button>
-        <div className="Linktext">
-          <Link to="/register">
-            <u>Need an account?</u>
-          </Link>
+         */}
+          <Spacer y={1} />
+          <Button
+            icon={<UserIcon />}
+            size="lg"
+            color="primary"
+            flat
+            type="submit"
+          >
+            Log In
+          </Button>
+          <Spacer y={0.5} />
+          {/* <div className="Linktext">
+            <Link to="/register">
+              <u>Need an account?</u>
+            </Link>
+          </div> */}
         </div>
-      </div>
+      </form>
     </div>
   );
 }

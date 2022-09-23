@@ -14,7 +14,15 @@ function Homepage() {
   const [friends, setFriends] = useState([]);
   const [lastMessages, setLastMessages] = useState([]);
   const [roomarray, setRoomArray] = useState([]);
-  const { socket, allrequests, setAllRequests } = useContext(ChatContext);
+  const {
+    socket,
+    allrequests,
+    setAllRequests,
+    person,
+    setPerson,
+    chatState,
+    setChatState,
+  } = useContext(ChatContext);
 
   // const connectToRoom = (id) => {
   //   const room = friends.filter((item) => item._id === id);
@@ -25,10 +33,11 @@ function Homepage() {
   // };
   const connectToRoomMsg = (id) => {
     const room = lastMessages.filter((item) => item._id === id);
-    console.log(room[0]._id);
+    console.log(room[0].ROOM.friend);
     socket.emit("join_room", { room: room[0]._id });
-    navigate("/chat");
+    navigate("/main-page");
     sessionStorage.setItem("room", room[0]._id);
+    setPerson(room[0].ROOM.friend);
   };
 
   useEffect(() => {
@@ -80,11 +89,10 @@ function Homepage() {
   }, []);
 
   return (
-    <div className="App">
-      <div className="RoomTab">
-        <div className="header">
-          <h1>Chat</h1>
-        </div>
+    <div className="RoomTab">
+      <div>
+        <h1 className="header">Chat</h1>
+
         <OverlayTrigger
           placement="top"
           overlay={
@@ -106,7 +114,8 @@ function Homepage() {
             className="addFriend"
             variant="secondary"
             onClick={() => {
-              navigate("/add-friends");
+              // navigate("/add-friends");
+              setChatState("platform-users");
             }}
           >
             +
@@ -133,7 +142,8 @@ function Homepage() {
             className="newFriend"
             variant="secondary"
             onClick={() => {
-              navigate("/newfriends");
+              // navigate("/newfriends");
+              setChatState("friend-request");
             }}
           >
             <FaUserFriends />
@@ -163,14 +173,15 @@ function Homepage() {
             className="yourFriend"
             variant="secondary"
             onClick={() => {
-              navigate("/yourfriends");
+              setChatState("your-friend");
             }}
           >
             <BsHeartFill />
           </Button>
         </OverlayTrigger>
-        <div className="Chatlayout">
-          {/* <div>
+      </div>
+      <div>
+        {/* <div>
             {friends
               ? friends.map((person, i) => {
                   return (
@@ -188,24 +199,28 @@ function Homepage() {
                 })
               : null}
           </div> */}
-          <div className="msg">
-            {lastMessages.map((msg) => {
-              return (
-                <button
-                  key={msg._id}
-                  onClick={() => {
-                    connectToRoomMsg(msg._id);
-                  }}
-                >
-                  <span className="chatroomHomepage">{msg.ROOM.friend}</span>
-                  {"    "} {msg.message}
-                </button>
-              );
-            })}
-          </div>
+        <div className="msg">
+          {lastMessages.map((msg) => {
+            return (
+              <button
+                key={msg._id}
+                onClick={() => {
+                  connectToRoomMsg(msg._id);
+                }}
+                className="chatroomHomepage"
+              >
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <span>{msg.ROOM.friend}</span>
+                  {"   "}
+                  <span>{msg.message}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* <div>
+      {/* <div>
           <input
             type="text"
             placeholder="Name..."
@@ -221,7 +236,6 @@ function Homepage() {
         <button className="ButtonChat" onClick={connectToRoom}>
           Enter Chat
         </button> */}
-      </div>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 function Friends() {
   const [allUsers, setAllUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const { socket } = useContext(ChatContext);
+  const { socket, setChatState } = useContext(ChatContext);
   const navigate = useNavigate();
   useEffect(() => {
     Axios.get(`${API_HOST}/all-users`, {
@@ -60,6 +60,13 @@ function Friends() {
     <div className="RoomTab">
       <div className="header">
         <input placeholder="Search..." type="text" onChange={handleFilter} />
+        <button
+          onClick={() => {
+            setChatState("homepage");
+          }}
+        >
+          Back
+        </button>
       </div>
       {filteredUsers.length !== 0
         ? filteredUsers.map((user, i) => {

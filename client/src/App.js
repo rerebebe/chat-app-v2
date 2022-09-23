@@ -9,6 +9,7 @@ import Homepage from "./Homepage";
 import Friends from "./Friends";
 import YourFriends from "./YourFriends";
 import NewFriends from "./NewFriends";
+import Mainpage from "./Mainpage";
 import { ChatContext } from "./helpers/ChatContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -19,9 +20,11 @@ function App() {
   const [room, setRoom] = useState("");
   const [password, setPassword] = useState("");
   const [allrequests, setAllRequests] = useState([]);
+  const [person, setPerson] = useState("");
+  const [chatState, setChatState] = useState("homepage");
 
   return (
-    <div className="App">
+    <div>
       <Router>
         <ChatContext.Provider
           value={{
@@ -34,6 +37,10 @@ function App() {
             setPassword,
             allrequests,
             setAllRequests,
+            person,
+            setPerson,
+            chatState,
+            setChatState,
           }}
         >
           <Routes>
@@ -44,6 +51,7 @@ function App() {
             <Route path="/add-friends" element={<Friends />} />
             <Route path="/newfriends" element={<NewFriends />} />
             <Route path="/yourfriends" element={<YourFriends />} />
+            <Route path="/main-page" element={<Mainpage />} />
           </Routes>
         </ChatContext.Provider>
       </Router>

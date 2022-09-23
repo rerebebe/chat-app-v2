@@ -7,7 +7,8 @@ import { ChatContext } from "./helpers/ChatContext";
 
 function NewFriends() {
   const navigate = useNavigate();
-  const { allrequests, setAllRequests, socket } = useContext(ChatContext);
+  const { allrequests, setAllRequests, socket, setChatState } =
+    useContext(ChatContext);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
@@ -90,6 +91,14 @@ function NewFriends() {
     <div className="RoomTab">
       <div className="header">
         <input placeholder="Search..." type="text" onChange={handleFilter} />
+        <button
+          button
+          onClick={() => {
+            setChatState("homepage");
+          }}
+        >
+          Back
+        </button>
       </div>
       {filteredUsers.length !== 0
         ? filteredUsers.map((user, i) => {

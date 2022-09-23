@@ -3,6 +3,9 @@ import { useContext, useState } from "react";
 import { ChatContext } from "./helpers/ChatContext";
 import { API_HOST } from "./helpers/constants";
 import { useNavigate } from "react-router-dom";
+import { Input, Grid, Button, Spacer } from "@nextui-org/react";
+import { Link } from "react-router-dom";
+import { UserIcon } from "./components/UserIcon";
 
 function Register() {
   const navigate = useNavigate();
@@ -13,17 +16,20 @@ function Register() {
 
   const signUp = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setAlert("passwords do not match!!");
-    }
+
     const response = await Axios.post(`${API_HOST}/register`, {
       userName: userName,
       passWord: password,
     });
     try {
-      console.log(response);
-      navigate("/");
-      sessionStorage.setItem("name", userName);
+      if (password !== confirmPassword) {
+        setAlert("passwords do not match!!");
+        navigate("/register");
+      } else {
+        console.log(response);
+        navigate("/");
+        sessionStorage.setItem("name", userName);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -31,47 +37,83 @@ function Register() {
 
   return (
     <div className="App">
-      <div className="loginTab">
-        {alert}
-        <div className="login">
-          <div>
-            <label>User Name:</label>
-            <input
-              type="text"
-              placeholder="userName..."
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
-              required
-            />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input
-              type="text"
-              placeholder="password..."
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              required
-            />
-          </div>
-          <div>
-            <label>Confirm Password:</label>
-            <input
-              type="text"
-              placeholder="password..."
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-              required
-            />
-          </div>
+      <form onSubmit={signUp}>
+        <div className="signinLoginTab">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            style={{ backgroundColor: "lightgrey" }}
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => {
+              navigate("/register");
+            }}
+            style={{ color: "blue" }}
+          >
+            Sign Up
+          </button>
         </div>
-        <button onClick={signUp} className="ButtonChat">
-          Sign Up
-        </button>
-      </div>
+        <div className="loginTab">
+          <h1 style={{ color: "darkslategrey" }}>Get an account</h1>
+          {alert}
+
+          <div className="loginContent">
+            <Grid>
+              <Input
+                rounded
+                bordered
+                placeholder="UserName"
+                label="UserName"
+                status="default"
+                size="md"
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid>
+              <Input.Password
+                rounded
+                bordered
+                placeholder="Password"
+                label="Password"
+                status="default"
+                size="md"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid>
+              <Input.Password
+                rounded
+                bordered
+                placeholder="Confirm Password"
+                label="Confirm Password"
+                status="default"
+                size="md"
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
+              />
+            </Grid>
+          </div>
+          <Spacer />
+          <Button
+            icon={<UserIcon />}
+            size="lg"
+            color="primary"
+            flat
+            type="submit"
+          >
+            Sign Up
+          </Button>
+          <Spacer />
+        </div>
+      </form>
     </div>
   );
 }
