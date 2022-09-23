@@ -23,6 +23,9 @@ body {
 .msg {
   display: grid;
 }
+.msg2 {
+  display: grid;
+}
 .msg button {
   background-color: rgba(197, 105, 121, 0.517);
   border: none;
@@ -136,7 +139,6 @@ body {
 .chatroomHomepage {
   background: transparent;
   border: none;
-
   color: black;
   margin: 10px 0px;
 }
@@ -152,7 +154,7 @@ body {
 }
 
 .chatroom {
-  width: 420px;
+  /* width: 420px; */
   font-weight: 700;
   background-color: rgba(197, 105, 121, 0.517);
   margin: 1px 0px;

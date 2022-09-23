@@ -68,37 +68,39 @@ function Friends() {
           Back
         </button>
       </div>
-      {filteredUsers.length !== 0
-        ? filteredUsers.map((user, i) => {
-            return (
-              <div className="chatroom" key={user._id}>
-                {user.userName}
-                <button
-                  className="chatroomButton"
-                  onClick={() => {
-                    addFriend(user._id);
-                  }}
-                >
-                  +
-                </button>
-              </div>
-            );
-          })
-        : allUsers.map((user, i) => {
-            return (
-              <div className="chatroom" key={user._id}>
-                {user.userName}
-                <button
-                  className="chatroomButton"
-                  onClick={() => {
-                    addFriend(user._id);
-                  }}
-                >
-                  +
-                </button>
-              </div>
-            );
-          })}
+      <div>
+        {filteredUsers.length !== 0
+          ? filteredUsers.map((user, i) => {
+              return (
+                <div className="chatroom" key={user._id}>
+                  {user.userName}
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      addFriend(user._id);
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              );
+            })
+          : allUsers.map((user, i) => {
+              return (
+                <div className="chatroom" key={user._id}>
+                  {user.userName}
+                  <button
+                    className="chatroomButton"
+                    onClick={() => {
+                      addFriend(user._id);
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              );
+            })}
+      </div>
     </div>
   );
 }
