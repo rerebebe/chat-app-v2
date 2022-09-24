@@ -14,16 +14,17 @@ function YourFriends() {
   const [friends, setFriends] = useState([]);
   const [lastMessages, setLastMessages] = useState([]);
   const [roomarray, setRoomArray] = useState([]);
-  const { socket, allrequests, setAllRequests, setChatState } =
+  const { socket, allrequests, setAllRequests, setChatState, setPerson } =
     useContext(ChatContext);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const connectToRoom = (id) => {
     const room = friends.filter((item) => item._id === id);
-    console.log(room[0].room);
+    console.log(room[0]);
     socket.emit("join_room", { room: room[0].room });
     navigate("/main-page");
     sessionStorage.setItem("room", room[0].room);
+    setPerson(room[0].friend);
   };
   const handleFilter = (e) => {
     const searchWord = e.target.value;
@@ -65,11 +66,10 @@ function YourFriends() {
           Back
         </button>
       </div>
-
-      {friends
-        ? friends.map((person, i) => {
-            return (
-              <div key={person._id} className="chatroom">
+      <div className="msg">
+        {friends
+          ? friends.map((person, i) => {
+              return (
                 <button
                   className="chatroomHomepage"
                   onClick={() => {
@@ -81,10 +81,10 @@ function YourFriends() {
                     {person.friend}
                   </div>
                 </button>
-              </div>
-            );
-          })
-        : null}
+              );
+            })
+          : null}
+      </div>
     </div>
   );
 }

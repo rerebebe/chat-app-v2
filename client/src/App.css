@@ -151,6 +151,7 @@ body {
   border: none;
   color: black;
   margin: 10px 0px;
+  padding: 30px 20px;
 }
 .chatroomHomepage span {
   padding-right: 150px;
@@ -170,13 +171,13 @@ body {
   margin: 1px 0px;
   cursor: pointer;
   border: none;
-  color: black;
-  justify-content: center;
-  padding: 30px 20px;
+  /* color: black; */
+  /* 
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
+
 .addFriend {
   /* color: rgba(236, 97, 120, 0.854); */
   color: black;
