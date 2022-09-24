@@ -22,7 +22,7 @@ function YourFriends() {
     const room = friends.filter((item) => item._id === id);
     console.log(room[0].room);
     socket.emit("join_room", { room: room[0].room });
-    navigate("/chat");
+    navigate("/main-page");
     sessionStorage.setItem("room", room[0].room);
   };
   const handleFilter = (e) => {

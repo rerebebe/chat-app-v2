@@ -4,12 +4,14 @@ import { API_HOST } from "./helpers/constants";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ChatContext } from "./helpers/ChatContext";
+import toast, { Toaster } from "react-hot-toast";
 
 function NewFriends() {
   const navigate = useNavigate();
   const { allrequests, setAllRequests, socket, setChatState } =
     useContext(ChatContext);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const notify = () => toast("Friend added!", { icon: "👏" });
 
   useEffect(() => {
     Axios.get(`${API_HOST}/newfriends`, {
@@ -45,7 +47,8 @@ function NewFriends() {
     //sessionStorage.setItem("room", singleUser[0].room);
     socket.emit("join_room", { room: singleUser[0].room });
     sessionStorage.setItem("room", singleUser[0].room);
-    navigate("/chat");
+    navigate("/main-page");
+    notify();
     console.log(`key:${id}`);
     console.log(singleUser[0].room);
     console.log(response.data);
@@ -89,6 +92,9 @@ function NewFriends() {
 
   return (
     <div className="RoomTab">
+      <div>
+        <Toaster position="top-left" reverseOrder={false} />
+      </div>
       <div className="header">
         <input placeholder="Search..." type="text" onChange={handleFilter} />
         <button

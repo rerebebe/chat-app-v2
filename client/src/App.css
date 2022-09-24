@@ -120,6 +120,10 @@ body {
   font-size: large;
   padding-left: 10px;
 }
+.header input::placeholder {
+  color: rgb(26, 26, 26);
+}
+
 .header button {
   flex: 20%;
   height: 40px;
