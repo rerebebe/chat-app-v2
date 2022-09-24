@@ -171,11 +171,11 @@ body {
   margin: 1px 0px;
   cursor: pointer;
   border: none;
-  /* color: black; */
-  /* 
+  color: black;
   align-items: center;
   display: flex;
-  justify-content: space-between; */
+  justify-content: space-between;
+  padding: 20px 10px;
 }
 
 .addFriend {
