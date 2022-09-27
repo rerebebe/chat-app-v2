@@ -22,6 +22,8 @@ function Homepage() {
     setPerson,
     chatState,
     setChatState,
+    textNumbers,
+    setTextNumbers,
   } = useContext(ChatContext);
 
   // const connectToRoom = (id) => {
@@ -58,6 +60,7 @@ function Homepage() {
             }),
           },
         }).then((response) => {
+          console.log(response.data);
           console.log(
             response.data.filter((item) => {
               return item.ROOM.userName === sessionStorage.getItem("name");
@@ -91,7 +94,9 @@ function Homepage() {
   return (
     <div className="RoomTab">
       <div>
-        <h1 className="header">Chat</h1>
+        <h1 className="header" style={{ fontSize: "30px" }}>
+          Chat
+        </h1>
 
         <OverlayTrigger
           placement="top"
@@ -213,6 +218,8 @@ function Homepage() {
                   <span>{msg.ROOM.friend}</span>
                   {"   "}
                   <span>{msg.message}</span>
+                  {"   "}
+                  <span style={{ justifyContent: "flex-end" }}>{msg.time}</span>
                 </div>
               </button>
             );

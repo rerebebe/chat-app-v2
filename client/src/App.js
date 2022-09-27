@@ -12,6 +12,7 @@ import NewFriends from "./NewFriends";
 import Mainpage from "./Mainpage";
 import { ChatContext } from "./helpers/ChatContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Resize from "./helpers/Resize";
 
 const socket = io.connect(CONNECTION_PORT);
 
@@ -22,6 +23,7 @@ function App() {
   const [allrequests, setAllRequests] = useState([]);
   const [person, setPerson] = useState("");
   const [chatState, setChatState] = useState("homepage");
+  const [textNumbers, setTextNumbers] = useState({ author: "", number: 0 });
 
   return (
     <div>
@@ -41,6 +43,8 @@ function App() {
             setPerson,
             chatState,
             setChatState,
+            textNumbers,
+            setTextNumbers,
           }}
         >
           <Routes>
@@ -52,6 +56,7 @@ function App() {
             <Route path="/newfriends" element={<NewFriends />} />
             <Route path="/yourfriends" element={<YourFriends />} />
             <Route path="/main-page" element={<Mainpage />} />
+            <Route path="/resize" element={<Resize />} />
           </Routes>
         </ChatContext.Provider>
       </Router>

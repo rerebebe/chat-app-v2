@@ -10,9 +10,17 @@ function Chat() {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   // const [currentMessageNumber, setCurrentMessageNumber] = useState(10);
-  const [typing, setTyping] = useState("");
+  // const [typing, setTyping] = useState("");
   // const [person, setPerson] = useState("");
-  const { socket, userName, room, person, setPerson } = useContext(ChatContext);
+  const {
+    socket,
+    userName,
+    room,
+    person,
+    setPerson,
+    textNumbers,
+    setTextNumbers,
+  } = useContext(ChatContext);
   // const increment = () => {
   //   setCurrentMessageNumber(currentMessageNumber + 1);
   // };
@@ -43,6 +51,11 @@ function Chat() {
       });
       setCurrentMessage("");
 
+      // setTextNumbers({
+      //   author: sessionStorage.getItem("name"),
+      //   number: (textNumbers += 1),
+      // });
+      // console.log({ textNumbers });
       // increment();
     }
   };
@@ -121,7 +134,7 @@ function Chat() {
             setCurrentMessage(event.target.value);
           }}
           onKeyPress={(event) => {
-            event.key === "Enter" && sendMessage();
+            event.key === "Enter" && sendMessage(); //鍵盤的Enter
           }}
         />
         <button onClick={sendMessage}>&#9658;</button>

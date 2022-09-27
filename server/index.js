@@ -189,6 +189,9 @@ app.get("/latest-message", (req, res) => {
             message: {
               $first: "$message",
             },
+            time: {
+              $first: "$time",
+            },
           },
         },
         {
