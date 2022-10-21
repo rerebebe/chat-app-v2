@@ -21,9 +21,6 @@ function Chat() {
     textNumbers,
     setTextNumbers,
   } = useContext(ChatContext);
-  // const increment = () => {
-  //   setCurrentMessageNumber(currentMessageNumber + 1);
-  // };
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -52,11 +49,10 @@ function Chat() {
       setCurrentMessage("");
 
       // setTextNumbers({
-      //   author: sessionStorage.getItem("name"),
-      //   number: (textNumbers += 1),
+      //   author: sessionStorage.getItem("author"),
+      //   number: (textNumbers.number = textNumbers.number + 1),
       // });
       // console.log({ textNumbers });
-      // increment();
     }
   };
   // chatroom friend
@@ -65,8 +61,13 @@ function Chat() {
     socket.emit("output-message", { room: sessionStorage.getItem("room") });
     socket.on("output-message", (history) => {
       // console.log(history.map((chat) => chat.chatName));
-      //console.log(history);
+      // console.log(history[history.length - 1]);
       setMessageList(history);
+      // setTextNumbers({
+      //   author: history[history.length - 1].author,
+      //   number: (textNumbers.number = textNumbers.number + 1),
+      // });
+      console.log({ textNumbers });
     });
     Axios.get(`${API_HOST}/chatroomfriend`, {
       params: {

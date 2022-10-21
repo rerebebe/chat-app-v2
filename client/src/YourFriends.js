@@ -8,6 +8,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { API_HOST } from "./helpers/constants";
 import { FaUserFriends } from "react-icons/fa";
 import { BsHeartFill } from "react-icons/bs";
+import NewFriends from "./NewFriends";
 
 function YourFriends() {
   const navigate = useNavigate();
@@ -26,11 +27,13 @@ function YourFriends() {
     sessionStorage.setItem("room", room[0].room);
     setPerson(room[0].friend);
   };
+
   const handleFilter = (e) => {
     const searchWord = e.target.value;
     const newFilter = friends.filter((user) => {
-      return user.userName.toLowerCase().includes(searchWord);
+      return user.friend.toLowerCase().includes(searchWord);
     });
+    console.log(newFilter);
     setFilteredUsers(newFilter);
   };
 
@@ -53,6 +56,7 @@ function YourFriends() {
       setAllRequests(response.data);
     });
   }, []);
+  // console.log(friends);
 
   return (
     <div className="RoomTab">
@@ -67,8 +71,8 @@ function YourFriends() {
         </button>
       </div>
       <div className="msg">
-        {friends
-          ? friends.map((person, i) => {
+        {filteredUsers
+          ? filteredUsers.map((person, i) => {
               return (
                 <button
                   className="chatroomHomepage"
@@ -83,7 +87,21 @@ function YourFriends() {
                 </button>
               );
             })
-          : null}
+          : friends.map((person, i) => {
+              return (
+                <button
+                  className="chatroomHomepage"
+                  onClick={() => {
+                    connectToRoom(person._id);
+                  }}
+                >
+                  <div style={{ fontWeight: "bolder", fontSize: "15px" }}>
+                    {" "}
+                    {person.friend}
+                  </div>
+                </button>
+              );
+            })}
       </div>
     </div>
   );
